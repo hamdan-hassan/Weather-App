@@ -31,7 +31,7 @@ let data = JSON.parse(this.responseText)
  info_text.classList.add("text-info");
  info_text.classList.remove("text-danger");
  info_text.style.textTransform = "capitalize";	
- info_text.textContent = "Current Weather of " + input.value;
+ info_text.textContent = "Current Weather of " + input.value + ", " + data.sys.country;
  input.value = "";
 }
 
