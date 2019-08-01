@@ -1,6 +1,8 @@
 let input = document.querySelector(".form-control");
 let list_group = document.getElementsByClassName("list-group")[0];
 let info_text = document.getElementById("info-text");
+let image = document.getElementById("img");
+let card = document.getElementsByClassName("card")[0];
 let output = "";
 
 document.getElementsByClassName("btn")[0].addEventListener("click" , () =>{
@@ -40,23 +42,53 @@ info_text.classList.add("text-danger");
 info_text.classList.remove("text-info");	
 info_text.textContent = "City Not Found :( Try Again";
 input.value = "";
-list_group.innerHTML = "";
+image.src = "";
+card.style.display = "none";
 }
+
 
 }
 
 xhr.send();
 
+ let xhr2 = new XMLHttpRequest();
+
+    
+    xhr2.open("GET", "https://en.wikipedia.org/w/api.php?action=query&origin=*&list=search&srsearch=" + input.value + "AND'total'&format=json&srlimit=1");
+    xhr2.onload = function() {
+        if (this.status === 200) {
+            let data2 = JSON.parse(this.responseText);
+
+           let id = data2.query.search[0].pageid;
+
+
+            let xhr3 = new XMLHttpRequest();
+            xhr3.open("GET", "https://en.wikipedia.org/w/api.php?format=json&formatversion=2&origin=*&action=query&prop=pageimages&piprop=original%7Cpageterms&pageids=" + id)
+
+            xhr3.onload = function() {
+                if (this.status === 200) {
+
+                    let data3 = JSON.parse(this.responseText);
+                    image.src = data3.query.pages[0].original.source;
+
+                }
+            }
+
+
+            xhr3.send()
+
+
+
+        }
+
+    }
+
+    xhr2.send();
+   card.style.display = "block";
+
+
+
+
 	
 });
-// let container = document.getElementById("data");
-// document.getElementById("btn").addEventListener("click" , ()=> {
-
-// 
-
-// 
-
-
-
-// });
 
